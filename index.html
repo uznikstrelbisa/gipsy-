@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Меню Клуба</title>
+<style>
+    body {
+        font-family: sans-serif;
+        background: #111;
+        color: #eee;
+        text-align: center;
+        padding: 10px;
+    }
+    button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #555;
+    }
+    #orders {
+        margin-top: 20px;
+        text-align: left;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    ul {
+        padding-left: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>Меню Клуба</h1>
+
+<div id="menu"></div>
+
+<div id="orders">
+    <h2>Текущие заказы:</h2>
+    <ul id="orderList"></ul>
+    <button onclick="clearOrders()">Очистить заказы</button>
+</div>
+
+<script>
+const menuItems = [
+    "САЛАТ С СЕМГОЙ И ВЯЛЕНЫМИ ТОМАТАМИ",
+    "ЦЕЗАРЬ С КУРИЦЕЙ",
+    "САЛАТ С ГОВЯЖЬЕЙ ВЫРЕЗКОЙ, СВЕЖИМИ ОВОЩАМИ И ОРЕХОВЫМ СОУСОМ",
+    "САЛАТ С БАКЛАЖАНАМИ, СПЕЛЫМИ ТОМАТАМИ И СЫРОМ ФЕТА",
+    "ФЕРМЕРСКИЙ САЛАТ С ГОВЯДИНОЙ В АЗИАТСКОМ СТИЛЕ",
+    "СОЧНЫЙ ГРЕЧЕСКИЙ САЛАТ С БРЫНЗОЙ",
+    "ЦЕЗАРЬ С КРЕВЕТКАМИ И ЛОСОСЕМ",
+    "САЛАТ ИЗ ГОВЯДИНЫ СО СТРУЧКОВОЙ ФАСОЛЬЮ",
+    "САЛАТ С СОЧНОЙ ГОВЯДИНОЙ И КАРТОФЕЛЕМ ПАЙ",
+    "САЛАТ С КОПЧЕННОЙ КУРИЦЕЙ И ВИНОГРАДОМ",
+    "ХОЛОДНЫЕ ЗАКУСКИ",
+    "РЫБНОЕ АССОРТИ",
+    "КАРПАЧЧО ИЗ СЕМГИ С ГРЕНКАМИ",
+    "СЫРНАЯ ТАРЕЛКА (моцарелла, твердый сыр, пармезан, дор блю, виноград)",
+    "МЯСНОЕ АССОРТИ",
+    "ТАРЕЛКА С СОЛЕНЬЯМИ",
+    "АССОРТИ СВЕЖИХ ОВОЩЕЙ",
+    "СКУМБРИЯ С ЗАПЕЧЕННЫМ КАРТОФЕЛЕМ",
+    "ЯЗЫК НА ГРИЛЕ с кисло-сладким соусом и горчицей",
+    "ОЛИВКИ И МАСЛИНЫ",
+    "ЛИМОН",
+    "ГОРЯЧИЕ ЗАКУСКИ",
+    "ПИВНОЙ СЕТ №1 (луковые кольца, наггетсы, сырные палочки, фирменные чипсы, соус тар-тар)",
+    "ПИВНОЙ СЕТ №2 (крылышки, колбаски, гренки, сырные палочки, кольца луковые, фирменные чипсы, кальмары в кляре, чечел, соусы: сальса, тар-тар)",
+    "КОЛБАСКИ НА УГЛЯХ (говядина, баранина, курица)",
+    "КОЛБАСКИ ОХОТНИКА К ПИВУ",
+    "КУРИНЫЕ НАГГЕТСЫ",
+    "СЫРНЫЕ ПАЛОЧКИ",
+    "ЧЕСНОЧНЫЕ ГРЕНКИ С СОУСОМ",
+    "ПИЦЦА И ВЫПЕЧКА",
+    "ФИРМЕННАЯ «ГИПСИ» (салями, ветчина, грибы, яйцо, маслины)",
+    "ПЕППЕРОНИ (пепперони, халапенью)",
+    "ЦЕЗАРЬ (куриная грудка, пармезан, черри, руккола, яйцо)",
+    "4 СЫРА (моцарелла, чеддер, пармезан, дор блю)",
+    "МАРГАРИТА (помидоры, сыр)",
+    "ТЕХАС (говядина bbq, халапенью, черри)",
+    "СЫРНАЯ ЛЕПЕШКА",
+    "ХАЧАПУРИ ПО-АДЖАРСКИ",
+    "ХЛЕБНАЯ КОРЗИНА"
+];
+
+const menuDiv = document.getElementById('menu');
+const orderList = document.getElementById('orderList');
+
+function renderMenu() {
+    menuItems.forEach(item => {
+        const btn = document.createElement('button');
+        btn.textContent = item;
+        btn.onclick = () => addOrder(item);
+        menuDiv.appendChild(btn);
+    });
+}
+
+function addOrder(item) {
+    const now = new Date().toLocaleTimeString();
+    const orderText = `${item} — ${now}`;
+    const li = document.createElement('li');
+    li.textContent = orderText;
+    orderList.appendChild(li);
+
+    // Сохраняем заказ в localStorage
+    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    orders.push(orderText);
+    localStorage.setItem('orders', JSON.stringify(orders));
+}
+
+function loadOrders() {
+    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    orders.forEach(orderText => {
+        const li = document.createElement('li');
+        li.textContent = orderText;
+        orderList.appendChild(li);
+    });
+}
+
+function clearOrders() {
+    localStorage.removeItem('orders');
+    orderList.innerHTML = '';
+}
+
+renderMenu();
+loadOrders();
+</script>
+</body>
+</html>
